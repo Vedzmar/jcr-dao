@@ -1,19 +1,22 @@
-import com.epam.trainings.jcr.dao.EmployeeDAO;
-import com.epam.trainings.jcr.dao.impl.EmployeeDAOImpl;
-import com.epam.trainings.jcr.entities.Employee;
-import org.apache.jackrabbit.commons.JcrUtils;
+import com.epam.trainings.jcr.dao.JcrDaoUtils;
+import org.apache.jackrabbit.commons.cnd.CndImporter;
+import org.apache.jackrabbit.commons.cnd.ParseException;
 import org.apache.jackrabbit.core.TransientRepository;
 
 import javax.jcr.*;
+import javax.jcr.nodetype.InvalidNodeTypeDefinitionException;
+import javax.jcr.nodetype.NodeTypeExistsException;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Iterator;
-import java.util.List;
 
 public class Main {
     private static final String JCR_DEFAULT_DIRECTORY = "C:/jcr_dir";
     public static final String WORKSPACE_NAME = "myWorkspace";
+    private static final String NODE_TYPE_DEFINITION_FILE = "employee.cnd";
 
     public static void main(String[] args) throws RepositoryException {
         Repository repository = getRepository();
@@ -21,13 +24,28 @@ public class Main {
         Session session = null;
         try{
             session = getSession(repository);
-
+            init(session);
 
         } catch (RepositoryException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
             if (session != null && session.isLive()) session.logout();
         }
+    }
+
+    private static void init(Session session) throws RepositoryException, IOException, ParseException {
+        if (!session.getWorkspace().getNodeTypeManager().hasNodeType(JcrDaoUtils.NODE_TYPE)) {
+            registerNodeTypeFromFile(session);
+        }
+
+    }
+
+    private static void registerNodeTypeFromFile(Session session) throws IOException, RepositoryException, ParseException {
+        CndImporter.registerNodeTypes(new FileReader(WORKSPACE_NAME + "/" + NODE_TYPE_DEFINITION_FILE),session);
     }
 
     private static Repository getRepository() {

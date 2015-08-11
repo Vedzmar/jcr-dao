@@ -17,9 +17,9 @@ import java.util.*;
 public class EmployeeDAOImpl implements EmployeeDAO {
 
     private static final Logger log = LoggerFactory.getLogger(EmployeeDAOImpl.class);
-    public static final String NAME = "name";
-    public static final String AGE = "age";
-    public static final String HIRING_DATE = "hiringDate";
+    public static final String NAME = "epm:name";
+    public static final String AGE = "epm:age";
+    public static final String HIRING_DATE = "epm:hiringDate";
     public static final String EMPLOYEE_NODE_NAME = "employee";
     public static final String EMPLOYEE_FOLDER = "employeeFolder";
 
