@@ -2,6 +2,7 @@ package com.epam.trainings.jcr.dao;
 
 import com.epam.trainings.jcr.entities.Employee;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,4 +17,10 @@ public interface EmployeeDAO {
     public boolean editEmployee(Employee employee);
     
     public boolean deleteEmployee(Employee employee);
+    
+    public List<Employee> getEmployeeWhoLivesWithCats();
+
+    public List<Employee> getEmployeeWhoHaveAdultKids();
+    
+    public List<Employee> getEmployeesWhosNameStartsWith(String name);
 }

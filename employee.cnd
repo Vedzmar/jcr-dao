@@ -1,5 +1,0 @@
-<epm = 'http://epam.com/training'>
-[epm:employee] > nt:base
-- epm:name (string) = "Default name" mandatory  autocreated
-- epm:age (long)  = "18" mandatory
-- epm:hiringDate (date) mandatory 

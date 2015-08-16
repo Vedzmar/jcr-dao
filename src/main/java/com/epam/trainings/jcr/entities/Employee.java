@@ -2,30 +2,35 @@ package com.epam.trainings.jcr.entities;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class Employee {
-    private String id;
+    private long id;
     private String name;
     private long age;
     private Calendar hiringDate;
+    private List<Child> children;
 
     public Employee(String name, long age, Calendar hiringDate) {
+        this.id = System.currentTimeMillis();
         this.name = name;
         this.age = age;
         this.hiringDate = hiringDate;
+        this.children = new ArrayList<Child>();
+    }
+    public Employee(long id, String name, long age, Calendar hiringDate, List<Child> children) {
+        this(name,age,hiringDate,children);
+        this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                ", hiringDate=" +new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS").format(hiringDate.getTime()) +
-                '}';
+    public Employee(String name, long age, Calendar hiringDate, List<Child> children) {
+        this(name, age, hiringDate);
+        this.children = children;
     }
-
-    public Employee(String id, String name, long age, Calendar hiringDate) {
+    
+    public Employee(long id, String name, long age, Calendar hiringDate) {
         this(name, age, hiringDate);
         this.id = id;
     }
@@ -54,11 +59,29 @@ public class Employee {
         this.hiringDate = hiringDate;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public List<Child> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Child> children) {
+        this.children = children;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", hiringDate=" + new SimpleDateFormat("MM/dd/yyyy").format(hiringDate.getTime()) +
+                ", children=" + children +
+                '}';
     }
 }

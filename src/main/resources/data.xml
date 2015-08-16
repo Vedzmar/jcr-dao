@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<employeeFolder jcr:primaryType="nt:unstructured" xmlns:fn="http://www.w3.org/2005/xpath-functions"
+                xmlns:fn_old="http://www.w3.org/2004/10/xpath-functions" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:epm="http://epam.com/training"
+                xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:rep="internal"
+                xmlns:nt="http://www.jcp.org/jcr/nt/1.0">
+    <employee jcr:primaryType="epm:employee" epm:age="27" epm:hiringDate="2010-01-03T12:19:58.579+03:00"
+              epm:name="Pamella Hudson" id="1439716798579">
+        <child jcr:primaryType="epm:child" epm:birthDate="2010-09-07T12:19:58.579+03:00" epm:name="Brodie Hudson"/>
+        <child jcr:primaryType="epm:child" epm:birthDate="2012-06-29T12:19:58.579+03:00" epm:name="Clarice Hudson"/>
+    </employee>
+    <employee jcr:primaryType="epm:employee" epm:age="32" epm:hiringDate="2009-03-16T12:22:01.711+03:00"
+              epm:name="Dove Lovell" id="1439716921711">
+        <child jcr:primaryType="epm:child" epm:birthDate="2008-11-13T12:22:01.711+03:00" epm:name="William Lovell"/>
+
+    </employee>
+    <employee jcr:primaryType="epm:employee" epm:age="41" epm:hiringDate="2000-02-22T12:22:01.711+03:00"
+              epm:name="Fox Davidson" id="1439716921711">
+        <child jcr:primaryType="epm:child" epm:birthDate="1990-03-18T12:22:01.711+03:00" epm:name="Marshall Davidson"/>
+        <child jcr:primaryType="epm:child" epm:birthDate="1997-01-25T12:22:01.711+03:00" epm:name="Ferdinand Davidson"/>
+        <child jcr:primaryType="epm:child" epm:birthDate="2011-06-27T12:22:01.711+03:00" epm:name="Selby Davidson"/>
+        <child jcr:primaryType="epm:child" epm:birthDate="2011-06-27T12:22:01.711+03:00" epm:name="Dotty Davidson"/>
+        <child jcr:primaryType="epm:child" epm:birthDate="2011-06-27T12:22:01.711+03:00" epm:name="Kiaran Davidson"/>
+    </employee>
+    <employee jcr:primaryType="epm:employee" epm:age="44" epm:hiringDate="2013-11-03T12:22:01.711+03:00"
+              epm:name="Tatianna Ayers" id="1439716921711">
+    </employee>
+    <employee jcr:primaryType="epm:employee" epm:age="50" epm:hiringDate="1999-01-01T12:22:01.711+03:00"
+              epm:name="Patricia Brent" id="1439716921711">
+        <child jcr:primaryType="epm:child" epm:birthDate="1990-04-01T12:22:01.711+03:00" epm:name="Caitlyn Brent"/>
+        <child jcr:primaryType="epm:child" epm:birthDate="1992-09-21T12:22:01.711+03:00" epm:name="Leta Brent"/>
+        <child jcr:primaryType="epm:child" epm:birthDate="1994-01-22T12:22:01.711+03:00" epm:name="Dustin Brent"/>
+        <child jcr:primaryType="epm:child" epm:birthDate="1997-02-19T12:22:01.711+03:00" epm:name="Zara Brent"/>
+    </employee>
+    <employee jcr:primaryType="epm:employee" epm:age="21" epm:hiringDate="2015-03-07T12:22:01.711+03:00"
+              epm:name="Elmo Gibb" id="1439716921711">
+    </employee>
+    <employee jcr:primaryType="epm:employee" epm:age="35" epm:hiringDate="2008-07-13T12:22:01.711+03:00"
+              epm:name="Jerold Hobbes" id="1439716921711">
+        <child jcr:primaryType="epm:child" epm:birthDate="2000-03-16T12:22:01.711+03:00" epm:name="Zack Hobbes"/>
+        <child jcr:primaryType="epm:child" epm:birthDate="2002-02-08T12:22:01.711+03:00" epm:name="Willy Hobbes"/>
+        <child jcr:primaryType="epm:child" epm:birthDate="2007-03-12T12:22:01.711+03:00" epm:name="Bart Hobbes"/>
+    </employee>
+    <employee jcr:primaryType="epm:employee" epm:age="22" epm:hiringDate="2015-03-06T12:22:01.711+03:00"
+              epm:name="Darius Levitt" id="1439716921711">
+        <child jcr:primaryType="epm:child" epm:birthDate="2011-09-02T12:22:01.711+03:00" epm:name="Lexy Levitt"/>
+    </employee>
+</employeeFolder>

@@ -1,0 +1,12 @@
+<epm = 'http://epam.com/training'>
+[epm:child] > nt:base
+- epm:name (string) mandatory
+- epm:birthDate (Date) mandatory
+
+[epm:employee] > nt:base, mix:lastModified
+orderable
+- id (long) mandatory
+- epm:name (string) = "Default name" mandatory  autocreated
+- epm:age (long)  = "18" mandatory
+- epm:hiringDate (date) mandatory 
++ * (epm:child) multiple
