@@ -4,19 +4,18 @@ import com.epam.trainings.jcr.IterableNodeIterator;
 import com.epam.trainings.jcr.dao.EmployeeDAO;
 import com.epam.trainings.jcr.entities.Child;
 import com.epam.trainings.jcr.entities.Employee;
-import com.epam.trainings.jcr.helpers.JcrHelper;
+import org.apache.jackrabbit.core.value.ValueFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.jcr.*;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
-import javax.jcr.query.Row;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static com.epam.trainings.jcr.helpers.JcrHelper.pl;
-import static java.util.Arrays.asList;
+import static java.lang.String.format;
 
 /**
  * Created by Dzianis on 06.08.2015.
@@ -38,6 +37,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public static final String ID = "id";
 
     private final Session session;
+    private DateFormat xpathDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public EmployeeDAOImpl(Session session) {
         this.session = session;
@@ -107,29 +107,44 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public List<Employee> getEmployeeWhoLivesWithCats() {
-        List<Employee> employees = new ArrayList<Employee>();
         try {
-            QueryManager manager = session.getWorkspace().getQueryManager();
-            Query query =  manager.createQuery("//element(*, epm:employee)[not(jcr:contains(child,'*'))]", Query.XPATH);
-            
-            for(Node node : makeIterable(query.execute().getNodes())){
-                employees.add( createEmployeeFromNode(node) );
-            }
+            return getEmployeeByXPath("//element(*, epm:employee)[not(jcr:contains(child,'*')) and @epm:age > 40]");
         } catch (RepositoryException e) {
             log.error("Error during searching persons who lives with cats " + e.getMessage());
         }
-        return employees;
+        return new ArrayList<Employee>();
     }
-
 
     @Override
     public List<Employee> getEmployeeWhoHaveAdultKids() {
-        return null;
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -18);
+        
+        try {
+            return getEmployeeByXPath(
+                    format("//element(*,epm:employee)[child/@epm:birthDate < xs:dateTime('%s')]",
+                            session.getValueFactory().createValue(calendar).getString()
+                    )
+                );
+        } catch (RepositoryException e) {
+            log.error("Error during getting employees who have adult kids  " + e.getMessage());
+        }
+        
+        return new ArrayList<Employee>();
     }
 
     @Override
     public List<Employee> getEmployeesWhosNameStartsWith(String name) {
-        return null;
+
+        try {
+            return getEmployeeByXPath(
+                    format("//element(*,epm:employee)[jcr:like(@epm:name,'%s%%')]", name)
+            );
+        } catch (RepositoryException e) {
+            log.error("Error during getting employees whos name starts with (" + name + ") " + e.getMessage());
+        }
+        
+        return new ArrayList<Employee>();
     }
 
     private Employee createEmployeeFromNode(Node employeeNode) throws RepositoryException {
@@ -226,4 +241,18 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     private IterableNodeIterator makeIterable(NodeIterator iterator) throws RepositoryException {
         return new IterableNodeIterator(iterator);
     }
+
+    private List<Employee> getEmployeeByXPath(String xpath) throws RepositoryException {
+        List<Employee> employees = new ArrayList<Employee>();
+
+        QueryManager manager = this.session.getWorkspace().getQueryManager();
+        Query query =  manager.createQuery(xpath , Query.XPATH);
+
+        for(Node node : makeIterable(query.execute().getNodes())){
+            employees.add( createEmployeeFromNode(node) );
+        }
+
+        return employees;
+    }
+
 }

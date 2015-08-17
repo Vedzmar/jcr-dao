@@ -1,5 +1,7 @@
 import com.epam.trainings.jcr.dao.EmployeeDAO;
 import com.epam.trainings.jcr.dao.impl.EmployeeDAOImpl;
+import com.epam.trainings.jcr.entities.Employee;
+import com.epam.trainings.jcr.eventlistner.GrouppedEventListener;
 import com.epam.trainings.jcr.helpers.JcrHelper;
 import org.apache.jackrabbit.commons.cnd.CndImporter;
 import org.apache.jackrabbit.commons.cnd.ParseException;
@@ -8,8 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.jcr.*;
+import javax.jcr.observation.Event;
 import java.io.*;
 import java.util.Arrays;
+import java.util.Calendar;
+
+import static java.util.Arrays.asList;
 
 public class Runner{
     private static final String JCR_DEFAULT_DIRECTORY = "C:/jcr_dir";
@@ -31,9 +37,18 @@ public class Runner{
             EmployeeDAO employeeDAO = new EmployeeDAOImpl(session);
             
             importContent(session);
-            
-            JcrHelper.pl(employeeDAO.getEmployeeWhoLivesWithCats());
 
+
+            employeeDAO.saveEmployee(new Employee("Dzianis Sudas", 25, Calendar.getInstance()));
+            Employee me = employeeDAO.getEmployeesWhosNameStartsWith("Dzianis").get(0);
+            
+            me.setAge(26);
+            
+            employeeDAO.editEmployee(me);
+            
+            for(Employee employee : employeeDAO.getEmployeeWhoLivesWithCats()){
+                JcrHelper.pl(employee);
+            }
             //com.epam.trainings.jcr.helpers.JcrHelper.printNodeTreeRecursive(session.getNode("/employeeFolder"));
         } catch (RepositoryException e) {
             e.printStackTrace();
@@ -50,6 +65,20 @@ public class Runner{
                 throw new RepositoryException(e);
             }
         }
+
+        initListeners(session);
+    }
+
+    private static void initListeners(Session session) throws RepositoryException {
+        session.getWorkspace().getObservationManager().addEventListener(
+                GrouppedEventListener.getInstance(),
+                Event.NODE_ADDED ,
+                "/employeeFolder",
+                false,
+                null,
+                (String[]) asList(EmployeeDAOImpl.EMPLOYEE_NODE_TYPE).toArray(),
+                false
+            );
     }
 
     private static void registerNodeTypeFromFile(Session session) throws IOException, RepositoryException, ParseException {
