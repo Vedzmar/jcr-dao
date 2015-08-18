@@ -10,3 +10,7 @@ orderable
 - epm:age (long)  = "18" mandatory
 - epm:hiringDate (date) mandatory 
 + * (epm:child) multiple
+
+[epm:folder] > nt:base
+orderable
++ * (epm:employee) multiple

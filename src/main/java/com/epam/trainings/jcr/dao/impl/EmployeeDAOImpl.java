@@ -4,7 +4,6 @@ import com.epam.trainings.jcr.IterableNodeIterator;
 import com.epam.trainings.jcr.dao.EmployeeDAO;
 import com.epam.trainings.jcr.entities.Child;
 import com.epam.trainings.jcr.entities.Employee;
-import org.apache.jackrabbit.core.value.ValueFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +11,6 @@ import javax.jcr.*;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import static java.lang.String.format;
@@ -37,7 +35,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public static final String ID = "id";
 
     private final Session session;
-    private DateFormat xpathDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public EmployeeDAOImpl(Session session) {
         this.session = session;

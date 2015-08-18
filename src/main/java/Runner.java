@@ -1,3 +1,4 @@
+import com.epam.trainings.jcr.Connector;
 import com.epam.trainings.jcr.dao.EmployeeDAO;
 import com.epam.trainings.jcr.dao.impl.EmployeeDAOImpl;
 import com.epam.trainings.jcr.entities.Employee;
@@ -5,21 +6,15 @@ import com.epam.trainings.jcr.eventlistner.GrouppedEventListener;
 import com.epam.trainings.jcr.helpers.JcrHelper;
 import org.apache.jackrabbit.commons.cnd.CndImporter;
 import org.apache.jackrabbit.commons.cnd.ParseException;
-import org.apache.jackrabbit.core.TransientRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.jcr.*;
 import javax.jcr.observation.Event;
 import java.io.*;
-import java.util.Arrays;
 import java.util.Calendar;
 
-import static java.util.Arrays.asList;
-
 public class Runner{
-    private static final String JCR_DEFAULT_DIRECTORY = "C:/jcr_dir";
-    public static final String WORKSPACE_NAME = "myWorkspace";
     private static final String NODE_TYPE_DEFINITION_FILE = "employee.cnd";
 
     private static final Logger log = LoggerFactory.getLogger(Runner.class);
@@ -27,29 +22,16 @@ public class Runner{
 
 
     public static void main(String[] args) throws IOException {
-        Repository repository = getRepository();
+        Repository repository = Connector.getRepository();
 
         Session session = null;
         try{
-            session = getSession(repository);
+            session = Connector.getSession(repository);
             init(session);
-            
             EmployeeDAO employeeDAO = new EmployeeDAOImpl(session);
-            
             importContent(session);
-
-
-            employeeDAO.saveEmployee(new Employee("Dzianis Sudas", 25, Calendar.getInstance()));
-            Employee me = employeeDAO.getEmployeesWhosNameStartsWith("Dzianis").get(0);
-            
-            me.setAge(26);
-            
-            employeeDAO.editEmployee(me);
-            
-            for(Employee employee : employeeDAO.getEmployeeWhoLivesWithCats()){
-                JcrHelper.pl(employee);
-            }
-            //com.epam.trainings.jcr.helpers.JcrHelper.printNodeTreeRecursive(session.getNode("/employeeFolder"));
+            employeeDAO.saveEmployee(new Employee("name", 24, Calendar.getInstance()));
+//            JcrHelper.printNodeTreeRecursive(session.getNode("/employeeFolder"));
         } catch (RepositoryException e) {
             e.printStackTrace();
         } finally {
@@ -76,7 +58,7 @@ public class Runner{
                 "/employeeFolder",
                 false,
                 null,
-                (String[]) asList(EmployeeDAOImpl.EMPLOYEE_NODE_TYPE).toArray(),
+                new String[] {"nt:unstructured"},
                 false
             );
     }
@@ -86,36 +68,6 @@ public class Runner{
                 new InputStreamReader( ClassLoader.getSystemResourceAsStream(NODE_TYPE_DEFINITION_FILE) ),session
         );
 
-    }
-
-    private static Repository getRepository() {
-        return new TransientRepository(getRepositoryDir());
-    }
-
-    private static Session getSession(Repository repository) throws RepositoryException {
-        Session session = null;
-
-        try {
-            session = repository.login(
-                    new SimpleCredentials("admin","admin".toCharArray()));
-
-            if (Arrays.asList(session.getWorkspace().getAccessibleWorkspaceNames()).indexOf(WORKSPACE_NAME) == -1 ) {
-                session.getWorkspace().createWorkspace(WORKSPACE_NAME);
-            }
-
-        } finally {
-            if (session != null && session.isLive()) session.logout();
-        }
-
-        return repository.login(new SimpleCredentials("admin","admin".toCharArray()), WORKSPACE_NAME);
-    }
-
-    private static File getRepositoryDir(){
-        File file = new File(JCR_DEFAULT_DIRECTORY);
-
-        if (!file.exists()) file.mkdir();
-
-        return file;
     }
 
     public static void importContent(Session session) throws RepositoryException, IOException {
